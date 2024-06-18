@@ -12,6 +12,18 @@ public class AsyncTests
             .Assert(value => Assert.Equal("Async Result Error", value.Exception!.Message));
 
     [Fact]
+    public Task ShouldReturnValueWhenSuccess()
+        => RunsAsync()
+            .Bind(_ => ReturnsIntAsync())
+            .Assert(value => Assert.Equal(1, value.Value));
+
+    [Fact]
+    public Task ShouldReturnExceptionWhenFailure()
+        => RunsAsync()
+            .Bind(_ => ReturnsIntThrowsAsync())
+            .Assert(value => Assert.Equal("Async int Exception thrown", value.Exception.Message));
+
+    [Fact]
     public Task ShouldReturnSuccessWhenTapCalled()
         => RunsAsync()
             .Tap(_ => RunsAsync())
@@ -54,7 +66,7 @@ public class AsyncTests
             .TryCatch(_ => RunsAsync())
             .Assert(value => Assert.NotNull(value.Exception))
             .Assert(value => Assert.Equal("Async Error", value.Exception!.Message));
-    
+
     [Fact]
     public Task ShouldReturnSuccessWhenSuccessIsReturned()
         => RunsAsync()
@@ -90,14 +102,14 @@ public class AsyncTests
 
     [Fact]
     public Task ShouldHaveExceptionWhenCombined()
-    => ReturnsErrorAsync()
+        => ReturnsErrorAsync()
             .Combine(_ => RunsAsync("2"))
             .Assert(value => Assert.IsType<Exception>(value.Exception))
             .Assert(value => Assert.Null(value.Value.Item1))
             .Assert(value => Assert.Null(value.Value.Item2))
             .Assert(value => Assert.NotNull(value.Exception))
             .Assert(value => Assert.Equal("Async Error", value.Exception!.Message));
-    
+
     [Fact]
     public Task ShouldRunSuccessWhenMatch()
         => RunsAsync()
@@ -110,10 +122,10 @@ public class AsyncTests
                 error =>
                 {
                     Assert.True(false);
-                 
+
                     return error.Message;
                 });
-    
+
     [Fact]
     public Task ShouldRunFailureWhenMatch()
         => ReturnsErrorAsync()
@@ -126,7 +138,7 @@ public class AsyncTests
                 error =>
                 {
                     Assert.Equal("Async Error", error.Message);
-                    
+
                     return error.Message;
                 });
 }

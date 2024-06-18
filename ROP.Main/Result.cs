@@ -1,6 +1,6 @@
-﻿using ROP.Main.Helpers;
+﻿using Murunu.ROP.Helpers;
 
-namespace ROP.Main;
+namespace Murunu.ROP;
 
 public class Result<TValue>
 {
@@ -15,7 +15,7 @@ public class Result<TValue>
         Value = value;
     }
 
-    private Result(Exception exception)
+    internal Result(Exception exception)
     {
         Value = default;
         Exception = exception;
@@ -26,6 +26,9 @@ public class Result<TValue>
 
     //error path
     public static implicit operator Result<TValue> (Exception exception) => new(exception);
+    
+    public static Result<T> Success<T>(T value) => new(value);
+    public static Result<T> Failure<T>(Exception exception) => new(exception);
 }
 
 public class Result : Result<Unit>

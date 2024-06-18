@@ -1,5 +1,5 @@
 using ROP.Example.Services;
-using ROP.Main;
+using Murunu.ROP;
 
 var builder = WebApplication.CreateBuilder(args);
 

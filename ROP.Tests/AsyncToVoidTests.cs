@@ -4,12 +4,24 @@ namespace ROP.Tests;
 
 public class AsyncToVoidTests
 {
-     [Fact]
+    [Fact]
     public Task ShouldReturnErrorWhenErrorState()
         => RunsAsync()
             .Bind(_ => ReturnsError())
             .Assert(value => Assert.NotNull(value.Exception))
             .Assert(value => Assert.Equal("Error", value.Exception!.Message));
+
+    [Fact]
+    public Task ShouldReturnValueWhenSuccess()
+        => RunsAsync()
+            .Bind(_ => ReturnsInt())
+            .Assert(value => Assert.Equal(1, value.Value));
+
+    [Fact]
+    public Task ShouldReturnExceptionWhenFailure()
+        => RunsAsync()
+            .Bind(_ => ReturnsIntThrows())
+            .Assert(value => Assert.Equal("Int Exception thrown", value.Exception.Message));
 
     [Fact]
     public Task ShouldReturnSuccessWhenTapCalled()
@@ -22,7 +34,7 @@ public class AsyncToVoidTests
         => RunsAsync()
             .Tap(_ => ReturnsError())
             .Assert(value => Assert.Equal("Async Result Success", value.Value));
-    
+
     [Fact]
     public Task ShouldReturnErrorWhenExceptionIsThrown()
         => RunsAsync()
@@ -61,7 +73,7 @@ public class AsyncToVoidTests
 
     [Fact]
     public Task ShouldHaveExceptionWhenCombined()
-    => ReturnsErrorAsync()
+        => ReturnsErrorAsync()
             .Combine(_ => Runs("2"))
             .Assert(value => Assert.IsType<Exception>(value.Exception))
             .Assert(value => Assert.Null(value.Value.Item1))

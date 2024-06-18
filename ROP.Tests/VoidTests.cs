@@ -10,7 +10,7 @@ public class VoidTests
             .Bind(_ => ReturnsError())
             .Assert(value => Assert.NotNull(value.Exception))
             .Assert(value => Assert.Equal("Error", value.Exception!.Message));
-    
+
     [Fact]
     public void ShouldReturnSuccessWhenSuccess()
         => Runs()
@@ -18,17 +18,29 @@ public class VoidTests
             .Assert(value => Assert.Equal("Success", value.Value));
 
     [Fact]
+    public void ShouldReturnExceptionWhenFailure()
+        => Runs()
+            .Bind(_ => ReturnsIntThrows())
+            .Assert(value => Assert.Equal("Int Exception thrown", value.Exception.Message));
+
+    [Fact]
+    public void ShouldReturnValueWhenSuccess()
+        => Runs()
+            .Bind(_ => ReturnsInt())
+            .Assert(value => Assert.Equal(1, value.Value));
+
+    [Fact]
     public void ShouldReturnSuccessWhenTapCalled()
-    => Runs()
-        .Tap(_ => Runs())
-        .Assert(value => Assert.Equal("Success", value.Value));
+        => Runs()
+            .Tap(_ => Runs())
+            .Assert(value => Assert.Equal("Success", value.Value));
 
     [Fact]
     public void ShouldReturnSuccessWhenTapReturnsError()
-    => Runs()
-        .Tap(_ => ReturnsError())
-        .Assert(value => Assert.Equal("Success", value.Value));
-    
+        => Runs()
+            .Tap(_ => ReturnsError())
+            .Assert(value => Assert.Equal("Success", value.Value));
+
     [Fact]
     public void ShouldReturnSuccessWhenRunSucceeds()
         => Runs()
@@ -66,7 +78,7 @@ public class VoidTests
         => Runs()
             .TryCatch(_ => Runs())
             .Assert(value => Assert.Equal("Success", value.Value));
-    
+
     [Fact]
     public void ShouldReturnErrorWhenBindReturnsError()
         => ReturnsError()
@@ -96,30 +108,30 @@ public class VoidTests
 
     [Fact]
     public void ShouldHaveExceptionWhenCombined()
-    => ReturnsError()
+        => ReturnsError()
             .Combine(_ => Runs("2"))
             .Assert(value => Assert.IsType<Exception>(value.Exception))
             .Assert(value => Assert.Null(value.Value.Item1))
             .Assert(value => Assert.Null(value.Value.Item2))
             .Assert(value => Assert.NotNull(value.Exception))
             .Assert(value => Assert.Equal("Error", value.Exception!.Message));
-    
+
     [Fact]
     public void ShouldRunSuccessWhenMatch()
-     => Runs()
-         .Match(success =>
-             {
-                 Assert.Equal("Success", success);
+        => Runs()
+            .Match(success =>
+                {
+                    Assert.Equal("Success", success);
 
-                 return success;
-             },
-             error =>
-             {
-                 Assert.True(false);
-                 
+                    return success;
+                },
+                error =>
+                {
+                    Assert.True(false);
+
                     return error.Message;
-             });
-    
+                });
+
     [Fact]
     public void ShouldRunFailureWhenMatch()
         => ReturnsError()
@@ -132,7 +144,17 @@ public class VoidTests
                 error =>
                 {
                     Assert.Equal("Error", error.Message);
-                    
+
                     return error.Message;
                 });
+
+    [Fact]
+    public void ShouldReturnSuccessWhenStaticSuccess()
+        => Result.Success(1)
+            .Assert(value => Assert.Equal(1, value.Value));
+
+    [Fact]
+    public void ShouldReturnFailureWhenStaticFailure()
+        => Result.Failure<int>(new Exception("Failure"))
+            .Assert(value => Assert.Equal("Failure", value.Exception.Message));
 }

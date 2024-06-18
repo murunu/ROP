@@ -9,7 +9,7 @@
 
         <RootNamespace>Murunu.ROP</RootNamespace>
         <PackageId>Murunu.ROP</PackageId>
-        <Version>0.0.2</Version>
+        <Version>0.0.3</Version>
         <Description>
             Railway Oriented Programming library for C#.
         </Description>

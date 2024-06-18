@@ -1,2 +1,2 @@
 ﻿global using static ROP.Tests.Helpers.HelperMethods;
-global using ROP.Main;
+global using Murunu.ROP;

@@ -1,4 +1,4 @@
-﻿namespace ROP.Main;
+﻿namespace Murunu.ROP;
 
 public static partial class ResultExtensions
 {

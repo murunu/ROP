@@ -12,6 +12,18 @@ public class VoidToAsyncTests
             .Assert(value => Assert.Equal("Async Result Error", value.Exception!.Message));
 
     [Fact]
+    public Task ShouldReturnValueWhenSuccess()
+        => Runs()
+            .Bind(_ => ReturnsIntAsync())
+            .Assert(value => Assert.Equal(1, value.Value));
+
+    [Fact]
+    public Task ShouldReturnExceptionWhenFailure()
+        => Runs()
+            .Bind(_ => ReturnsIntThrowsAsync())
+            .Assert(value => Assert.Equal("Async int Exception thrown", value.Exception.Message));
+
+    [Fact]
     public Task ShouldReturnSuccessWhenTapCalled()
         => Runs()
             .Async()
@@ -24,7 +36,7 @@ public class VoidToAsyncTests
             .Async()
             .Tap(_ => ReturnsErrorAsync())
             .Assert(value => Assert.Equal("Success", value.Value));
-    
+
     [Fact]
     public Task ShouldReturnErrorWhenExceptionIsThrown()
         => Runs()
@@ -70,7 +82,7 @@ public class VoidToAsyncTests
             .Assert(value => Assert.Null(value.Value.Item2))
             .Assert(value => Assert.NotNull(value.Exception))
             .Assert(value => Assert.Equal("Error", value.Exception!.Message));
-    
+
     [Fact]
     public Task ShouldBeTaskWhenAsync()
         => Runs()

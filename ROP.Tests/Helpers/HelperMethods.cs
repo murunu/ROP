@@ -21,6 +21,12 @@ public static class HelperMethods
     {
         return Task.FromResult<Result<string>>("Async Result Success " + input);
     }
+    
+    public static int ReturnsInt() => 1;
+    public static Task<int> ReturnsIntAsync() => Task.FromResult(1);
+
+    public static int ReturnsIntThrows() => throw new Exception("Int Exception thrown");
+    public static Task<int> ReturnsIntThrowsAsync() => throw new Exception("Async int Exception thrown");
 
     public static Result<string> Throw()
     {
