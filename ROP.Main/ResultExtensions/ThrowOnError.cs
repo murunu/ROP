@@ -6,7 +6,7 @@ public static partial class ResultExtensions
     {
         if (!result.IsSuccess)
         {
-            throw result.Exception;
+            throw result.Exception!;
         }
 
         return result;
@@ -17,7 +17,7 @@ public static partial class ResultExtensions
         var res = await result;
         if (!res.IsSuccess)
         {
-            throw res.Exception;
+            throw res.Exception!;
         }
 
         return res;

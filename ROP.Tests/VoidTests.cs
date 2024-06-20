@@ -21,7 +21,7 @@ public class VoidTests
     public void ShouldReturnExceptionWhenFailure()
         => Runs()
             .Bind(_ => ReturnsIntThrows())
-            .Assert(value => Assert.Equal("Int Exception thrown", value.Exception.Message));
+            .Assert(value => Assert.Equal("Int Exception thrown", value.Exception!.Message));
 
     [Fact]
     public void ShouldReturnValueWhenSuccess()
@@ -149,6 +149,11 @@ public class VoidTests
                 });
 
     [Fact]
+    public void ShouldReturnFailureWhenUnitFailure()
+        => Result.Failure(new Exception("Not success"))
+            .Assert(value => Assert.Equal("Not success", value.Exception!.Message));
+
+    [Fact]
     public void ShouldReturnSuccessWhenStaticSuccess()
         => Result.Success(1)
             .Assert(value => Assert.Equal(1, value.Value));
@@ -156,5 +161,26 @@ public class VoidTests
     [Fact]
     public void ShouldReturnFailureWhenStaticFailure()
         => Result.Failure<int>(new Exception("Failure"))
-            .Assert(value => Assert.Equal("Failure", value.Exception.Message));
+            .Assert(value => Assert.Equal("Failure", value.Exception!.Message));
+
+    [Fact]
+    public void ShouldReturnSuccessWhenContinueIfSuccess()
+        => Runs()
+            .ContinueIf(_ => true)
+            .Bind(_ => Runs("2"))
+            .Assert(value => Assert.Equal("Success 2", value.Value));
+
+    [Fact]
+    public void ShouldReturnFailureWhenContinueIfNotSuccess()
+        => Runs()
+            .ContinueIf(_ => false, new Exception("Not Success"))
+            .Bind(_ => Runs("2"))
+            .Assert(value => Assert.Equal("Not Success", value.Exception!.Message));
+
+    [Fact]
+    public void ShouldReturnFailureWhenInitialFailureNotSuccess()
+        => ReturnsError()
+            .ContinueIf(_ => false, new Exception("Not Success"))
+            .Bind(_ => Runs("2"))
+            .Assert(value => Assert.Equal("Error", value.Exception!.Message));
 }

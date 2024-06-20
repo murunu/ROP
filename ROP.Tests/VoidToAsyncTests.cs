@@ -21,7 +21,7 @@ public class VoidToAsyncTests
     public Task ShouldReturnExceptionWhenFailure()
         => Runs()
             .Bind(_ => ReturnsIntThrowsAsync())
-            .Assert(value => Assert.Equal("Async int Exception thrown", value.Exception.Message));
+            .Assert(value => Assert.Equal("Async int Exception thrown", value.Exception!.Message));
 
     [Fact]
     public Task ShouldReturnSuccessWhenTapCalled()
@@ -88,4 +88,25 @@ public class VoidToAsyncTests
         => Runs()
             .Async()
             .Assert(value => Assert.IsType<Result<string>>(value));
+    
+    [Fact]
+    public Task ShouldReturnSuccessWhenContinueIfSuccess()
+        => Runs()
+            .ContinueIf(_ => Task.FromResult(true))
+            .Bind(_ => Runs("2"))
+            .Assert(value => Assert.Equal("Success 2", value.Value));
+    
+    [Fact]
+    public Task ShouldReturnFailureWhenContinueIfNotSuccess()
+        => Runs()
+            .ContinueIf(_ => Task.FromResult(false), new Exception("Not Success"))
+            .Bind(_ => Runs("2"))
+            .Assert(value => Assert.Equal("Not Success", value.Exception!.Message));
+    
+    [Fact]
+    public Task ShouldReturnFailureWhenInitialFailureNotSuccess()
+        => ReturnsError()
+            .ContinueIf(_ => Task.FromResult(false), new Exception("Not Success"))
+            .Bind(_ => Runs("2"))
+            .Assert(value => Assert.Equal("Error", value.Exception!.Message));
 }

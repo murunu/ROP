@@ -21,8 +21,8 @@ public static partial class ResultExtensions
         try
         {
             return result.IsSuccess
-                ? await func(result.Value)
-                : result.Exception;
+                ? await func(result.Value!)
+                : result.Exception!;
         }
         catch (Exception e)
         {
@@ -36,8 +36,8 @@ public static partial class ResultExtensions
         {
             var res = await result;
             return res.IsSuccess
-                ? await func(res.Value)
-                : res.Exception;
+                ? await func(res.Value!)
+                : res.Exception!;
         }
         catch (Exception e)
         {
@@ -51,8 +51,8 @@ public static partial class ResultExtensions
         {
             var res = await result;
             return res.IsSuccess
-                ? func(res.Value)
-                : res.Exception;
+                ? func(res.Value!)
+                : res.Exception!;
         }
         catch (Exception e)
         {

@@ -37,5 +37,10 @@ public class Result : Result<Unit>
     {
     }
     
+    private Result(Exception exception) : base(exception)
+    {
+    }
+    
     public static Result Success() => new();
+    public static Result Failure(Exception e) => new(e);
 }
