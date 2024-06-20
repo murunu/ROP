@@ -4,8 +4,8 @@ namespace ROP.Example.Services;
 
 public class PaymentService
 {
-    public async Task<Result<string>> ChargeCreditCard(string customerId, string orderId)
+    public Task<Result<string>> ChargeCreditCard(string customerId, string orderId)
     {
-        return "TransactionId";
+        return Task.FromResult(Result.Success("TransactionId"));
     }
 }

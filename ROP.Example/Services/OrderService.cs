@@ -10,8 +10,8 @@ public class OrderService
     // }
     
     
-    public async Task<Result<string>> SubmitOrder(List<string> lineItems)
+    public Task<Result<string>> SubmitOrder(List<string> lineItems)
     {
-        return "SubmitOrder";
+        return Task.FromResult(Result.Success("SubmitOrder"));
     }
 }
