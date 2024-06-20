@@ -149,7 +149,7 @@ public class AsyncTests
                 {
                     Assert.Equal("Async Result Success", success);
 
-                    return success;
+                    return await Task.FromResult(success);
                 },
                 error =>
                 {
@@ -171,7 +171,7 @@ public class AsyncTests
                 {
                     Assert.Equal("Async Error", error.Message);
 
-                    return error.Message;
+                    return await Task.FromResult(error.Message);
                 });
     
     [Fact]
@@ -181,13 +181,13 @@ public class AsyncTests
                 {
                     Assert.Equal("Async Result Success", success);
 
-                    return success;
+                    return await Task.FromResult(success);
                 },
                 async error =>
                 {
                     Assert.True(false);
 
-                    return error.Message;
+                    return await Task.FromResult(error.Message);
                 });
 
     [Fact]
@@ -197,13 +197,13 @@ public class AsyncTests
                 {
                     Assert.True(false);
 
-                    return success;
+                    return await Task.FromResult(success);
                 },
                 async error =>
                 {
                     Assert.Equal("Async Error", error.Message);
 
-                    return error.Message;
+                    return await Task.FromResult(error.Message);
                 });
 
     [Fact]
