@@ -159,6 +159,12 @@ public class VoidTests
             .Assert(value => Assert.Equal(1, value.Value));
 
     [Fact]
+    public void ShouldReturnUnitWhenStaticSuccess()
+        => Result.Success()
+            .Assert(value => Assert.IsType<Result>(value))
+            .Assert(value => Assert.IsType<Unit>(value.Value));
+
+    [Fact]
     public void ShouldReturnFailureWhenStaticFailure()
         => Result.Failure<int>(new Exception("Failure"))
             .Assert(value => Assert.Equal("Failure", value.Exception!.Message));
