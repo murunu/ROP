@@ -1,4 +1,5 @@
 ﻿using Murunu.ROP;
+using Murunu.ROP.Core;
 
 namespace ROP.Example.Services;
 

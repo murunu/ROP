@@ -1,4 +1,6 @@
-﻿namespace Murunu.ROP;
+﻿using Murunu.ROP.Core;
+
+namespace Murunu.ROP.ResultExtensions;
 
 public static partial class ResultExtensions
 {

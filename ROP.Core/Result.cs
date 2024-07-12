@@ -1,4 +1,6 @@
-﻿namespace Murunu.ROP;
+﻿using Murunu.ROP.Core.Helpers;
+
+namespace Murunu.ROP.Core;
 
 public class Result<TValue>
 {

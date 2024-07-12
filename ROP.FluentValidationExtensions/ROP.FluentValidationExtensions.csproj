@@ -7,8 +7,8 @@
         <Nullable>enable</Nullable>
         <LangVersion>Latest</LangVersion>
 
-        <RootNamespace>Murunu.ROP</RootNamespace>
-        <PackageId>Murunu.ROP</PackageId>
+        <RootNamespace>Murunu.ROP.FluentValidationExtensions</RootNamespace>
+        <PackageId>Murunu.ROP.FluentValidationExtensions</PackageId>
         <Version>0.1.4</Version>
         <Description>
             Railway Oriented Programming library for C#.
@@ -21,20 +21,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>ROP.Tests</_Parameter1>
-        </AssemblyAttribute>
-    </ItemGroup>
-
-    <ItemGroup>
         <None Include="../README.md" Pack="true" PackagePath="/" />
     </ItemGroup>
-
+    
     <ItemGroup>
-      <ProjectReference Include="..\ROP.Core\ROP.Core.csproj" />
+      <PackageReference Include="FluentValidation" Version="11.9.2" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+      <ProjectReference Include="..\ROP.Main\ROP.Main.csproj" />
     </ItemGroup>
+
 </Project>

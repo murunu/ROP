@@ -1,4 +1,6 @@
-﻿using ROP.Tests.Helpers;
+﻿using Murunu.ROP.Core;
+using Murunu.ROP.ResultExtensions;
+using ROP.Tests.Helpers;
 
 namespace ROP.Tests;
 

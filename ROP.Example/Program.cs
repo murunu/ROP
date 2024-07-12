@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Mvc;
+using Murunu.ROP.ResultExtensions;
+using ROP.Example;
 using ROP.Example.Services;
-using Murunu.ROP;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<EmailService>();
+builder.Services.AddScoped<OrderService>();
+builder.Services.AddScoped<PaymentService>();
+builder.Services.AddScoped<StockService>();
+builder.Services.AddScoped<ValidationService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -19,13 +26,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/", async (SubmitOrderRequest request,
+app.MapPost("/", ([FromBody]SubmitOrderRequest request,
         EmailService emailService,
         PaymentService paymentService,
         StockService stockService,
         ValidationService validationService,
         OrderService orderService) =>
-    await validationService.ValidateLineItems(request)
+    validationService.ValidateLineItems(request)
         .Bind(_ => validationService.ValidateStock(request))
         .Bind(_ => paymentService.ChargeCreditCard(request.OrderId, request.CustomerId))
         .Combine(_ => orderService.SubmitOrder(request.LineItems))
@@ -38,6 +45,25 @@ app.MapGet("/", async (SubmitOrderRequest request,
 
 app.Run();
 
-public abstract record SubmitOrderRequest(string OrderId, string CustomerId, List<string> LineItems);
+namespace ROP.Example
+{
+    public class SubmitOrderRequest
+    {
+        public string OrderId { get; set; }
+        public string CustomerId { get; set; }
+        public List<string> LineItems { get; set; }
+        public SubmitOrderRequest()
+        {
+        
+        }
+    
+        public SubmitOrderRequest(string orderId, string customerId, List<string> lineItems)
+        {
+            OrderId = orderId;
+            CustomerId = customerId;
+            LineItems = lineItems;
+        }
+    }
 
-public record SubmitOrderResponse(string OrderId, string TransactionId);
+    public record SubmitOrderResponse(string OrderId, string TransactionId);
+}

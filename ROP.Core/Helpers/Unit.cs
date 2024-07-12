@@ -1,4 +1,4 @@
-﻿namespace Murunu.ROP;
+﻿namespace Murunu.ROP.Core.Helpers;
 
 public class Unit
 {

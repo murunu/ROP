@@ -1,4 +1,6 @@
-﻿namespace ROP.Tests.Helpers;
+﻿using Murunu.ROP.Core;
+
+namespace ROP.Tests.Helpers;
 
 public static class ResultExtensions
 {
